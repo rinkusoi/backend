@@ -26,29 +26,11 @@ app.get('/api/messages', async (req: Request, res: Response) => {
 
 app.post('/api/messages', async (req: Request, res: Response) => {
     try {
-        // Логуємо отримані дані
         console.log('Received form data:', req.body);
-
-        // Валідація даних
-        const { userName, userLastName, userEmail, phoneNumber, message } = req.body;
-        if (!userName || !userEmail || !message) {
-            return res.status(400).json({ 
-                error: 'Missing required fields',
-                received: req.body 
-            });
-        }
-
         const db = await getDb();
         const result = await db.collection('messages').insertOne(req.body);
-        
-        // Логуємо успішне збереження
         console.log('Saved to database with ID:', result.insertedId);
-        
-        res.status(201).json({ 
-            success: true,
-            _id: result.insertedId, 
-            ...req.body 
-        });
+        res.status(201).json({ _id: result.insertedId, ...req.body });
     } catch (error) {
         console.error('Error saving message:', error);
         res.status(500).json({ error: 'Failed to create message' });
@@ -101,7 +83,6 @@ app.delete('/api/messages/:id', async (req: Request, res: Response) => {
 app.listen(3000, async () => {
     try {
         const db = await getDb();
-        // Перевіряємо з'єднання
         await db.command({ ping: 1 });
         console.log('Successfully connected to MongoDB');
         console.log('Database name:', db.databaseName);

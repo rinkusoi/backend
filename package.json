@@ -12,8 +12,7 @@
     "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongodb": "^6.16.0",
-    "morgan": "^1.10.0",
-    "reflect-metadata": "^0.2.2"
+    "morgan": "^1.10.0"
   },
   "devDependencies": {
     "@types/cors": "^2.8.17",
@@ -21,6 +20,7 @@
     "@types/mongodb": "^4.0.6",
     "@types/morgan": "^1.9.9",
     "@types/mssql": "^9.1.7",
+    "@types/node": "^22.15.3",
     "ts-node": "^10.9.2",
     "typescript": "^5.8.3"
   }
