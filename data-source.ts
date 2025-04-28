@@ -1,21 +1,16 @@
-import "reflect-metadata";
-import { DataSource } from "typeorm";
-import { UserMessage } from "./entity/user-message.entity";
+import { MongoClient } from 'mongodb';
 
-export const AppDataSource = new DataSource({
-    type: "mssql",
-    host: "localhost",
-    port: 1433,
-    username: "admin",            
-    password: "12345678",          
-    database: "NexGendb",
-    synchronize: true,
-    logging: false,
-    entities: [UserMessage],
-    options: {
-        encrypt: false
-    },
-    extra: {
-        trustServerCertificate: true,
-    }
+const url = 'mongodb://localhost:27017/NexGendb';
+const dbName = 'NexGendb';
+
+export const mongoClient = new MongoClient(url, {
+    connectTimeoutMS: 5000,
+    socketTimeoutMS: 5000,
 });
+
+export const getDb = async () => {
+    if (!mongoClient.connect()) {
+        await mongoClient.connect();
+    }
+    return mongoClient.db(dbName);
+};

@@ -1,10 +1,12 @@
 import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
-export class UserMessage {
-    @PrimaryGeneratedColumn('increment')
-    id: number | null=null;
-
-    @Column('varchar', { length: 50 })
-    name: string | null=null;
+export interface UserMessage {
+    _id?: string;
+    name: string;
+    userName: string;
+    userLastName: string;
+    userEmail: string;
+    phoneNumber: string;
+    message: string;
 }
