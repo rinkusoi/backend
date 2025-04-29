@@ -1,4 +1,4 @@
-import express, { Request, Response } from 'express';
+import express, { Request, Response, Router } from 'express';
 import cors from 'cors';
 import morgan from 'morgan';
 import { mongoClient, getDb } from './data-source';
@@ -6,14 +6,13 @@ import { ObjectId } from 'mongodb';
 import { UserMessage } from './entity/user-message.entity';
 
 const app = express();
+const router = Router();
 
-// Middleware
 app.use(cors());
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
-// Routes
 app.get('/api/messages', async (req: Request, res: Response) => {
     try {
         const db = await getDb();
@@ -37,7 +36,7 @@ app.post('/api/messages', async (req: Request, res: Response) => {
     }
 });
 
-app.get('/api/messages/:id', async (req: Request, res: Response) => {
+router.get('/api/messages/:id', async (req: Request, res: Response) => {
     try {
         const db = await getDb();
         const message = await db.collection('messages').findOne({ _id: new ObjectId(req.params.id) });
@@ -50,7 +49,7 @@ app.get('/api/messages/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.put('/api/messages/:id', async (req: Request, res: Response) => {
+router.put('/api/messages/:id', async (req: Request, res: Response) => {
     try {
         const db = await getDb();
         const result = await db.collection('messages').updateOne(
@@ -66,7 +65,7 @@ app.put('/api/messages/:id', async (req: Request, res: Response) => {
     }
 });
 
-app.delete('/api/messages/:id', async (req: Request, res: Response) => {
+router.delete('/api/messages/:id', async (req: Request, res: Response) => {
     try {
         const db = await getDb();
         const result = await db.collection('messages').deleteOne({ _id: new ObjectId(req.params.id) });
@@ -79,7 +78,8 @@ app.delete('/api/messages/:id', async (req: Request, res: Response) => {
     }
 });
 
-// Start server
+app.use(router);
+
 app.listen(3000, async () => {
     try {
         const db = await getDb();
